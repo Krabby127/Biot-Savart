@@ -4,11 +4,11 @@
 %             on a volume (+ 3D plot).
 %  REQUIRED:  BSmag Toolbox 20150407
 %  AUTHOR:    20150407, L. Queval (loic.queval@gmail.com)
-%  COPYRIGHT: 2015, Loic Quéval, BSD License (http://opensource.org/licenses/BSD-3-Clause).
+%  COPYRIGHT: 2015, Loic Quï¿½val, BSD License (http://opensource.org/licenses/BSD-3-Clause).
 %----------------------------------------------------
 
 % Initialize
-clear all, close all, clc
+close all; clc;
 BSmag = BSmag_init(); % Initialize BSmag analysis
 
 % Source points (where there is a current source)

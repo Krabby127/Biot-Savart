@@ -48,6 +48,6 @@ for i=1:points
         y(i)=height*tan(t_temp(i));
     end
 end
-a=[x;y;z];
+a=[x,y,z;y,z,x;z,x,y];
 a=a';
 end
