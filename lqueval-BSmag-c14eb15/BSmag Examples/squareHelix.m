@@ -52,4 +52,5 @@ x=x+x_pos;
 y=y+y_pos;
 z=z+z_pos;
 a=[x,y,z;y,z,x;z,x,y];
+a=a';
 end

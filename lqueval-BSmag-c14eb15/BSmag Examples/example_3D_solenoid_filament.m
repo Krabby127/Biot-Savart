@@ -25,7 +25,7 @@ BSmag = BSmag_init(); % Initialize BSmag analysis
 % 0.3048 m x 0.3048 m x 0.00635 m
 % Mostly independent of turn numbers
 % 10 pts (60 pts total {(10+10)*3} results in 54583452 calls to sqrt()
-Gamma = squareHelix(25,1000, 0.3048,0.3048, 0.00635,0,0,-0.1651/2);
+    Gamma = squareHelix(25,1000, 0.3048,0.3048, 0.00635,0,0,-0.1651/2);
 Gamma = [Gamma; squareHelix(25,1000, 0.3048,0.3048, 0.00635,0,0,0.1651/2)];
 % theta = linspace(-2*2*pi,2*2*pi,2*100);
 % Gamma = [cos(theta'),sin(theta'),theta'/10]; % x,y,z [m,m,m]
@@ -59,7 +59,7 @@ caxis([-0.5,0.5]*1e-5)
 
 % Plot some flux tubes
 figure(3), hold on, box on, grid on
-% plot3(Gamma(:,1),Gamma(:,2),Gamma(:,3),'.-r') % plot filament
+plot3(Gamma(:,1),Gamma(:,2),Gamma(:,3),'.-r') % plot filament
 [X0,Y0,Z0] = ndgrid(-1.5:0.5:1.5,-1.5:0.5:1.5,-2); % define tubes starting point
 htubes = streamtube(stream3(X,Y,Z,BX,BY,BZ,X0,Y0,Z0), [0.2 10]);
 xlabel ('x [m]'), ylabel ('y [m]'), zlabel ('z [m]'), title ('Some flux tubes')

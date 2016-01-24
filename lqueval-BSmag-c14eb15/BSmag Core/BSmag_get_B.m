@@ -50,6 +50,7 @@ for nF = 1:BSmag.Nfilament % Loop on each filament
         y_P(i) = linspace(Gamma(i,2), Gamma(i+1,2), NP); % discretization of Gamma for y component
         z_P(i) = linspace(Gamma(i,3), Gamma(i+1,3), NP); % discretization of Gamma for z component
     end
+    % Pre-allocate arrays
     DBx=zeros(1,size(BSmag.filament(BSmag.Nfilament).Gamma,1)-2);
     DBy=zeros(1,size(BSmag.filament(BSmag.Nfilament).Gamma,1)-2);
     DBz=zeros(1,size(BSmag.filament(BSmag.Nfilament).Gamma,1)-2);
@@ -60,7 +61,6 @@ for nF = 1:BSmag.Nfilament % Loop on each filament
     diffY=diff(y_P);
     diffZ=diff(z_P);
     % Add contribution of each source point P on each field point M (where we want to calculate the field)
-    % Total
     % callTotal = size(X,1)*size(X,2)*size(X,3)*(size(Gamma,1)-2);
     count=0;
     for m = 1:size(X,1);
@@ -75,7 +75,7 @@ for nF = 1:BSmag.Nfilament % Loop on each filament
                 
                 % Loop on each discretized segment of Gamma PkPk+1
                 for k = 1:length(x_P)-1
-                    % This is the most intensive call
+                    % This is the most intensive call (should be equivalent as commented out below)
                     % Called size(X,1)*size(X,2)*size(X,3)*(size(Gamma,1)-2) times
                     %
                     PkM3 = (sqrt((x_M-x_P(k))^2 + (y_M-y_P(k))^2 + (z_M-z_P(k))^2))^3;
@@ -88,7 +88,7 @@ for nF = 1:BSmag.Nfilament % Loop on each filament
                     count=count+1;
                 end
                 
-                % Sum
+                % Sum (should be equivalent as commented out below)
                 lastSumX = lastSumX + DBx(k);
                 lastSumY = lastSumY + DBy(k);
                 lastSumZ = lastSumZ + DBz(k);
