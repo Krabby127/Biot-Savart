@@ -22,17 +22,36 @@ BSmag = BSmag_init(); % Initialize BSmag analysis
 % tan(theta) (7Pi/4, 2Pi)
 % http://math.stackexchange.com/questions/978486/parametric-form-of-square
 
-% 0.3048 m x 0.3048 m x 0.00635 m
-% Mostly independent of turn numbers
-% 10 pts (60 pts total {(10+10)*3} results in 54583452 calls to sqrt()
-    Gamma = squareHelix(25,1000, 0.3048,0.3048, 0.00635,0,0,-0.1651/2);
-Gamma = [Gamma; squareHelix(25,1000, 0.3048,0.3048, 0.00635,0,0,0.1651/2)];
-% theta = linspace(-2*2*pi,2*2*pi,2*100);
-% Gamma = [cos(theta'),sin(theta'),theta'/10]; % x,y,z [m,m,m]
+turns=25;
+points=1000;
+width=0.3048;
+height=0.3048;
+depth=0.00635;
+xPos=0;
+yPos=0;
+zPos=0.1651;
+
 I = 1; % filament current [A]
 dGamma = 1e9; % filament max discretization step [m]
-[BSmag] = BSmag_add_filament(BSmag,Gamma,I,dGamma);
 
+% 0.3048 m x 0.3048 m x 0.00635 m
+% Mostly independent of turn number
+
+Gamma1 = squareHelix(turns,points, width,height, depth,xPos,yPos,-zPos/2,'x');
+Gamma1 = [Gamma1; squareHelix(turns,points, width,height, depth,xPos,yPos,zPos/2,'x')];
+% 1 out of 3 filaments
+[BSmag] = BSmag_add_filament(BSmag,Gamma1,I,dGamma);
+
+Gamma2 = squareHelix(turns,points, width,height, depth,0,0,-zPos/2,'y');
+Gamma2 = [Gamma2; squareHelix(turns,points, width,height, depth,xPos,yPos,zPos/2,'y')];
+% 2 out of 3 filaments
+[BSmag] = BSmag_add_filament(BSmag,Gamma2,I,dGamma);
+
+Gamma3 = squareHelix(turns,points, width,height, depth,xPos,yPos,-zPos/2,'z');
+Gamma3 = [Gamma3; squareHelix(turns,points, width,height, depth,xPos,yPos,zPos/2,'z')];
+% 3 out of 3 filaments
+[BSmag] = BSmag_add_filament(BSmag,Gamma3,I,dGamma);
+Gamma=[Gamma1;Gamma2;Gamma3];
 % Field points (where we want to calculate the field)
 x_M = linspace(-0.75,0.75,97); % x [m]
 y_M = linspace(-1,1,98); % y [m]
@@ -43,11 +62,11 @@ BSmag_plot_field_points(BSmag,X_M,Y_M,Z_M); % shows the field points volume
 % For Biot-Savart Integration
 [BSmag,X,Y,Z,BX,BY,BZ] = BSmag_get_B(BSmag,X_M,Y_M,Z_M);
 
-% Plot B/|B|
-figure(1)
-normB=sqrt(BX.^2+BY.^2+BZ.^2);
-quiver3(X,Y,Z,BX./normB,BY./normB,BZ./normB,'b')
-% axis tight
+% % Plot B/|B|
+% figure(1)
+% normB=sqrt(BX.^2+BY.^2+BZ.^2);
+% quiver3(X,Y,Z,BX./normB,BY./normB,BZ./normB,'b')
+% % axis tight
 
 % Plot Bz on the volume
 figure(2), hold on, box on, grid on
@@ -60,9 +79,12 @@ caxis([-0.5,0.5]*1e-5)
 % Plot some flux tubes
 figure(3), hold on, box on, grid on
 plot3(Gamma(:,1),Gamma(:,2),Gamma(:,3),'.-r') % plot filament
-[X0,Y0,Z0] = ndgrid(-1.5:0.5:1.5,-1.5:0.5:1.5,-2); % define tubes starting point
+[X0,Y0,Z0] = ndgrid(-width:0.5:width,-height:0.5:height,depth-zPos:0.5:depth+zPos); % define tubes starting point
 htubes = streamtube(stream3(X,Y,Z,BX,BY,BZ,X0,Y0,Z0), [0.2 10]);
 xlabel ('x [m]'), ylabel ('y [m]'), zlabel ('z [m]'), title ('Some flux tubes')
 view(3), axis equal, axis tight
 set(htubes,'EdgeColor','none','FaceColor','c') % change tube color
 camlight left % change tube light
+
+filename='Workspace.mat';
+save(filename);
