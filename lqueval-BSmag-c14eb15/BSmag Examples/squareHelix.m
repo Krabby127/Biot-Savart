@@ -23,11 +23,11 @@ switch nargin
 end
 t=linspace(0,2*pi*turns,points);
 x=zeros(1,points);
-x=x+x_pos;
+% x=x+x_pos;
 y=zeros(1,points);
-y=y+y_pos;
-z=linspace(0,depth,points);
-z=z+z_pos;
+% y=y+y_pos;
+z=linspace(-depth/2,depth/2,points);
+% z=z+z_pos;
 % t_temp;
 t_temp=rem(t,2*pi);
 for i=1:points
@@ -48,6 +48,8 @@ for i=1:points
         y(i)=height*tan(t_temp(i));
     end
 end
+x=x+x_pos;
+y=y+y_pos;
+z=z+z_pos;
 a=[x,y,z;y,z,x;z,x,y];
-a=a';
 end
