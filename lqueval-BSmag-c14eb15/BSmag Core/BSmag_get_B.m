@@ -33,6 +33,7 @@ BZ = zeros(size(X,1),size(X,2),size(X,3));
 x_P=zeros(1,size(BSmag.filament(BSmag.Nfilament).Gamma,1)-1);
 y_P=zeros(1,size(BSmag.filament(BSmag.Nfilament).Gamma,1)-1);
 z_P=zeros(1,size(BSmag.filament(BSmag.Nfilament).Gamma,1)-1);
+count=0;
 for nF = 1:BSmag.Nfilament % Loop on each filament
     
     Gamma = BSmag.filament(nF).Gamma;
@@ -62,7 +63,7 @@ for nF = 1:BSmag.Nfilament % Loop on each filament
     diffZ=diff(z_P);
     % Add contribution of each source point P on each field point M (where we want to calculate the field)
     % callTotal = size(X,1)*size(X,2)*size(X,3)*(size(Gamma,1)-2);
-    count=0;
+    
     for m = 1:size(X,1);
         for n = 1:size(X,2);
             for p = 1:size(X,3);
@@ -103,5 +104,5 @@ for nF = 1:BSmag.Nfilament % Loop on each filament
             end
         end
     end
-    display(count);
 end
+display(count);
