@@ -23,14 +23,14 @@ BSmag = BSmag_init(); % Initialize BSmag analysis
 % tan(theta) (7Pi/4, 2Pi)
 % http://math.stackexchange.com/questions/978486/parametric-form-of-square
 
-turns=2;
-points=8;
+turns=40;
+points=1000;
 width=0.3048;
 height=0.3048;
 depth=0.00635;
 xPos=0;
 yPos=0;
-seperation=0.1651;
+seperation=0.1651*4;
 
 
 % Points for stream3
@@ -66,7 +66,7 @@ d(46:54,2)=width;
 
 
 I = 1; % filament current [A]
-dGamma = 1e2; % filament max discretization step [m]
+dGamma = 1e9; % filament max discretization step [m]
 % 0.3048 m x 0.3048 m x 0.00635 m
 % Mostly independent of turn number
 
@@ -98,17 +98,21 @@ z_M = linspace(-1,1,99); % z [m]
 
 % % Plot B/|B|
 % figure(1)
-% normB=sqrt(BX.^2+BY.^2+BZ.^2);
+normB=sqrt(BX.^2+BY.^2+BZ.^2);
 % quiver3(X,Y,Z,BX./normB,BY./normB,BZ./normB,'b')
 % % axis tight
 
 % Plot Bz on the volume
 figure(2), hold on, box on, grid on
 plot3(Gamma(:,1),Gamma(:,2),Gamma(:,3),'.-r') % plot filament
-slice(X,Y,Z,BZ,[0],[],[-1,0,1]), colorbar % plot Bz
+xslice=0;
+yslice=width*1.1;
+zslice=[-1,0,1];
+slice(X,Y,Z,normB,xslice,yslice,zslice), colorbar % plot Bz
 xlabel ('x [m]'), ylabel ('y [m]'), zlabel ('z [m]'), title ('Bz [T]')
 view(3), axis equal, axis tight
-caxis([-0.5,0.5]*1e-5)
+% caxis([0,5e-3])
+caxis auto
 
 % Plot some flux tubes
 figure(3), hold on, box on, grid on
@@ -123,6 +127,7 @@ view(3), axis equal, axis tight
 set(htubes,'EdgeColor','none','FaceColor','c') % change tube color
 shading interp;
 camlight left % change tube light
+% caxis auto
 
 filename='Workspace.mat';
 save(filename);
