@@ -79,7 +79,7 @@ Gamma2 = squareHelix(turns,points, width,height, depth,0,0,-seperation/2,'y');
 Gamma2 = [Gamma2; squareHelix(turns,points, width,height, depth,xPos,yPos,seperation/2,'y')];
 % 2 out of 3 filaments
 [BSmag] = BSmag_add_filament(BSmag,Gamma2,I,dGamma);
-% 
+%
 Gamma3 = squareHelix(turns,points, width,height, depth,xPos,yPos,-seperation/2,'z');
 Gamma3 = [Gamma3; squareHelix(turns,points, width,height, depth,xPos,yPos,seperation/2,'z')];
 % 3 out of 3 filaments
@@ -103,31 +103,36 @@ normB=sqrt(BX.^2+BY.^2+BZ.^2);
 % % axis tight
 
 % Plot Bz on the volume
-figure(2), hold on, box on, grid on
+h2=figure(2); hold on, box on, grid on
 plot3(Gamma(:,1),Gamma(:,2),Gamma(:,3),'.-r') % plot filament
 xslice=0;
 yslice=width*1.1;
 zslice=[-1,0,1];
 slice(X,Y,Z,normB,xslice,yslice,zslice), colorbar % plot Bz
-xlabel ('x [m]'), ylabel ('y [m]'), zlabel ('z [m]'), title ('Bz [T]')
+xlabel ('x [m]'), ylabel ('y [m]'), zlabel ('z [m]'), ...
+    title ('Bz [T]','FontSize',40)
 view(3), axis equal, axis tight
 % caxis([0,5e-3])
 caxis auto
+saveas(h2,'BField','jpg');
+saveas(h2,'BField','fig');
 
 % Plot some flux tubes
-figure(3), hold on, box on, grid on
+h3=figure(3); hold on, box on, grid on
 plot3(Gamma(:,1),Gamma(:,2),Gamma(:,3),'.-r') % plot filament
 % [X0,Y0,Z0] = ndgrid(-width:0.5:width,-height:0.5:height,depth-seperation:0.5:depth+seperation); % define tubes starting point
 % htubes = streamtube(stream3(X,Y,Z,BX,BY,BZ,X0,Y0,Z0), [0.2 10]);
 verts=stream3(X,Y,Z,BX,BY,BZ,d(:,1),d(:,2),d(:,3));
 div=divergence(X,Y,Z,BX,BY,BZ);
 htubes = streamtube(verts,X,Y,Z,-div,[0.25,10]);
-xlabel ('x [m]'), ylabel ('y [m]'), zlabel ('z [m]'), title ('Some flux tubes')
+xlabel ('x [m]'), ylabel ('y [m]'), zlabel ('z [m]'), title ('Flux tubes','FontSize',40)
 view(3), axis equal, axis tight
 set(htubes,'EdgeColor','none','FaceColor','c') % change tube color
 shading interp;
 camlight left % change tube light
 % caxis auto
+saveas(h3,'FluxTube','jpg');
+saveas(h3,'FluxTube','fig');
 
 filename='Workspace.mat';
 save(filename);
